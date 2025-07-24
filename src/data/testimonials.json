@@ -1,0 +1,10 @@
+[
+  { "id": 1, "author": "Marie L.", "comment": "Un service client exceptionnel et des conseillers toujours disponibles pour répondre à mes questions.", "date": "15/05/2023" },
+  { "id": 2, "author": "Thomas B.", "comment": "Processus de souscription simple et rapide. J'ai pu obtenir mon assurance en moins de 10 minutes.", "date": "03/06/2023" },
+  { "id": 3, "author": "Sophie M.", "comment": "Des tarifs compétitifs et des garanties complètes. Je recommande vivement Prevoyance Services.", "date": "22/07/2023" },
+  { "id": 4, "author": "Jean D.", "comment": "Excellente expérience lors de ma déclaration de sinistre. Remboursement rapide et sans tracas.", "date": "14/08/2023" },
+  { "id": 5, "author": "Camille P.", "comment": "Interface en ligne intuitive et facile à utiliser. La gestion de mon contrat n'a jamais été aussi simple.", "date": "29/09/2023" },
+  { "id": 6, "author": "Alexandre T.", "comment": "Des conseillers qui prennent le temps d'expliquer les détails de la couverture. Très professionnel.", "date": "10/10/2023" },
+  { "id": 7, "author": "Émilie R.", "comment": "J'apprécie particulièrement la transparence des offres et l'absence de frais cachés.", "date": "05/11/2023" },
+  { "id": 8, "author": "Lucas G.", "comment": "Service client réactif et efficace. Mes problèmes ont été résolus en un temps record.", "date": "18/12/2023" }
+]
