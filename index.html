@@ -2,13 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/logo-new.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Actualités & Conseils assurance</title>
+    <meta
+      name="description"
+      content="Guides pratiques sur mutuelle, prévoyance, auto, habitation. Comprendre pour mieux choisir."
+    />
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Actualités & Conseils assurance" />
+    <meta
+      property="og:description"
+      content="Guides pratiques sur mutuelle, prévoyance, auto, habitation. Comprendre pour mieux choisir."
+    />
+    <meta property="og:image" content="/cdn/hero-desk.webp" />
+    <meta property="og:type" content="website" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Prévoyance Services",
+        "description": "Courtier indépendant à Gennevilliers spécialisé en assurance santé, prévoyance, auto, habitation, professionnelle et animaux",
+        "url": "https://prevoyance-services.fr",
+        "telephone": "01 47 94 12 34",
+        "email": "contact@prevoyance-services.fr",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "15 Avenue Gabriel Péri",
+          "addressLocality": "Gennevilliers",
+          "postalCode": "92230",
+          "addressCountry": "FR"
+        },
+        "@type": ["Organization", "LocalBusiness"],
+        "areaServed": {
+          "@type": "City",
+          "name": "Gennevilliers"
+        },
+        "serviceType": "Courtage en assurances"
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script src="https://api.tempolabs.ai/proxy-asset?url=https://storage.googleapis.com/tempo-public-assets/error-handling.js"></script>
+    <script src="https://api.tempo.build/proxy-asset?url=https://storage.googleapis.com/tempo-public-assets/error-handling.js"></script>
   </body>
 </html>

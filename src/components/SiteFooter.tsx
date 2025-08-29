@@ -1,38 +1,11 @@
 import React, { useRef } from "react";
 import { useGSAP, gsap } from "@/lib/gsap";
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
 
 const SiteFooter = () => {
   const footerRef = useRef<HTMLElement>(null);
-  const glowLineRef = useRef<HTMLDivElement>(null);
-  const socialIconsRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useGSAP((gsap) => {
-    // Animate the glow line
-    if (glowLineRef.current) {
-      // Create a timeline for the glow line animation
-      const glowTl = gsap.timeline({
-        repeat: -1,
-        repeatDelay: 5,
-      });
-
-      // Animate the glow line from left to right
-      glowTl.fromTo(
-        glowLineRef.current,
-        { left: "-100%", width: "50%" },
-        { left: "150%", duration: 3, ease: "power2.inOut" },
-      );
-    }
-
     // Animate content on scroll into view
     if (
       contentRef.current &&
@@ -43,13 +16,13 @@ const SiteFooter = () => {
 
       gsap.fromTo(
         contentRef.current.children,
-        { y: 50, opacity: 0 },
+        { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           stagger: 0.1,
-          duration: 0.8,
-          ease: "power3.out",
+          duration: 0.6,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: footerRef.current,
             start: "top 80%",
@@ -58,261 +31,142 @@ const SiteFooter = () => {
         },
       );
     }
-
-    // Add hover animations for social icons
-    if (socialIconsRef.current) {
-      const icons = socialIconsRef.current.querySelectorAll(".social-icon");
-
-      icons.forEach((icon) => {
-        icon.addEventListener("mouseenter", () => {
-          gsap.to(icon, {
-            scale: 1.1,
-            boxShadow: "0 0 15px rgba(193, 55, 255, 0.8)",
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        });
-
-        icon.addEventListener("mouseleave", () => {
-          gsap.to(icon, {
-            scale: 1,
-            boxShadow: "0 0 5px rgba(193, 55, 255, 0.3)",
-            duration: 0.3,
-            ease: "power2.in",
-          });
-        });
-      });
-    }
-
-    return () => {
-      // Clean up event listeners
-      if (socialIconsRef.current) {
-        const icons = socialIconsRef.current.querySelectorAll(".social-icon");
-        icons.forEach((icon) => {
-          icon.removeEventListener("mouseenter", () => {});
-          icon.removeEventListener("mouseleave", () => {});
-        });
-      }
-    };
   }, []);
 
   return (
-    <footer
-      ref={footerRef}
-      className="bg-navy text-white relative overflow-hidden"
-    >
-      {/* Animated gradient border at the top */}
-      <div className="h-1 w-full bg-gradient-to-r from-emerald to-sapphire relative overflow-hidden">
-        {/* Animated glow line */}
+    <footer ref={footerRef} className="bg-[#0F172A] text-white py-16 px-6">
+      <div className="max-w-[1100px] mx-auto">
         <div
-          ref={glowLineRef}
-          className="absolute top-0 h-full bg-white/70 blur-sm"
-          style={{ width: "50%", left: "-100%" }}
-        ></div>
-      </div>
-
-      <div className="container mx-auto px-4 py-12">
-        <div ref={contentRef} className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <div className="mb-4">
-              <span className="text-xl font-bold font-sora text-emerald">
-                prevoyancesservices
-              </span>
-            </div>
-            <p className="text-gray-400 mb-4">
-              Des solutions d'assurance innovantes adaptées à vos besoins avec
-              un accompagnement personnalisé.
-            </p>
-            <div className="flex items-center text-gray-400">
-              <Phone className="h-4 w-4 mr-2" />
-              <span>01 23 45 67 89</span>
-            </div>
-            <div className="flex items-center text-gray-400 mt-2">
-              <Mail className="h-4 w-4 mr-2" />
-              <span>contact@prevoyance-services.fr</span>
-            </div>
-            <div className="flex items-center text-gray-400 mt-2">
-              <MapPin className="h-4 w-4 mr-2" />
-              <span>123 Avenue des Assurances, 75008 Paris</span>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              Liens rapides
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="/"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Accueil
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/a-propos"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  À propos
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/devis"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Obtenir un devis
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/blog"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/contact"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Products */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              Nos produits
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="/produits/habitation"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Assurance Habitation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/produits/auto"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Assurance Auto
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/produits/sante"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Assurance Santé
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/produits/prevoyance"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Prévoyance
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/produits/pro"
-                  className="text-gray-400 hover:text-emerald transition-colors duration-200"
-                >
-                  Assurance Professionnelle
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              Newsletter
-            </h3>
-            <p className="text-gray-400 mb-4">
-              Inscrivez-vous pour recevoir nos actualités et offres exclusives.
-            </p>
-            <form className="flex">
-              <input
-                type="email"
-                placeholder="Votre email"
-                className="bg-[#1A1F35] text-white px-4 py-2 rounded-l-md focus:outline-none focus:ring-1 focus:ring-primary w-full"
+          ref={contentRef}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12"
+        >
+          {/* Colonne 1 - Logo + Baseline */}
+          <div className="space-y-4">
+            <div>
+              <img
+                src="/logo-new.png"
+                alt="Prévoyance Services"
+                className="h-8 w-auto brightness-0 invert mb-3"
               />
-              <button
-                type="submit"
-                className="bg-emerald hover:bg-emerald/90 text-white px-4 py-2 rounded-r-md transition-colors duration-200"
+              <h3
+                className="text-white font-medium text-base font-inter"
+                style={{ lineHeight: "1.6" }}
               >
-                OK
-              </button>
-            </form>
+                Prévoyance Services
+              </h3>
+            </div>
+            <p
+              className="text-white/90 font-inter text-sm"
+              style={{ lineHeight: "1.6" }}
+            >
+              À vos côtés dans la durée
+            </p>
+          </div>
 
-            {/* Social Icons */}
-            <div ref={socialIconsRef} className="flex space-x-3 mt-6">
+          {/* Colonne 2 - Navigation */}
+          <div>
+            <h4 className="text-white/60 uppercase text-xs font-medium font-inter mb-4 tracking-wider">
+              Navigation
+            </h4>
+            <nav className="space-y-2">
               <a
-                href="#"
-                className="social-icon w-10 h-10 rounded-full bg-[#1A1F35] flex items-center justify-center text-white hover:text-primary transition-colors duration-200 shadow-[0_0_5px_rgba(193,55,255,0.3)]"
+                href="/"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
               >
-                <Facebook className="h-5 w-5" />
+                Accueil
               </a>
               <a
-                href="#"
-                className="social-icon w-10 h-10 rounded-full bg-[#1A1F35] flex items-center justify-center text-white hover:text-primary transition-colors duration-200 shadow-[0_0_5px_rgba(193,55,255,0.3)]"
+                href="/assurances"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
               >
-                <Twitter className="h-5 w-5" />
+                Nos assurances
               </a>
               <a
-                href="#"
-                className="social-icon w-10 h-10 rounded-full bg-[#1A1F35] flex items-center justify-center text-white hover:text-primary transition-colors duration-200 shadow-[0_0_5px_rgba(193,55,255,0.3)]"
+                href="/pourquoi-nous"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
               >
-                <Instagram className="h-5 w-5" />
+                Pourquoi nous
               </a>
               <a
-                href="#"
-                className="social-icon w-10 h-10 rounded-full bg-[#1A1F35] flex items-center justify-center text-white hover:text-primary transition-colors duration-200 shadow-[0_0_5px_rgba(193,55,255,0.3)]"
+                href="/faq"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
               >
-                <Linkedin className="h-5 w-5" />
+                FAQ
+              </a>
+              <a
+                href="/actualites"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
+              >
+                Actualités
+              </a>
+              <a
+                href="/contact"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
+              >
+                Contact
+              </a>
+            </nav>
+          </div>
+
+          {/* Colonne 3 - Contact */}
+          <div>
+            <h4 className="text-white/60 uppercase text-xs font-medium font-inter mb-4 tracking-wider">
+              Contact
+            </h4>
+            <div className="space-y-2">
+              <p
+                className="text-white/90 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
+              >
+                15 Av. Gabriel Péri
+                <br />
+                92230 Gennevilliers
+              </p>
+              <a
+                href="tel:0147941234"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
+              >
+                01 47 94 12 34
+              </a>
+              <a
+                href="mailto:contact@prevoyanceservices.fr"
+                className="block text-white/90 hover:text-white transition-colors duration-200 font-inter text-sm"
+                style={{ lineHeight: "1.6" }}
+              >
+                contact@prevoyanceservices.fr
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} prevoyancesservices. Tous droits
-            réservés.
-          </p>
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <a
-              href="/mentions-legales"
-              className="text-gray-500 hover:text-emerald text-sm transition-colors duration-200"
+        {/* Barre du bas */}
+        <div className="border-t border-white/20 mt-12 pt-6">
+          <div className="text-center">
+            <p
+              className="text-white/60 font-inter text-xs"
+              style={{ lineHeight: "1.6" }}
             >
-              Mentions légales
-            </a>
-            <a
-              href="/politique-confidentialite"
-              className="text-gray-500 hover:text-emerald text-sm transition-colors duration-200"
-            >
-              Politique de confidentialité
-            </a>
-            <a
-              href="/cgv"
-              className="text-gray-500 hover:text-emerald text-sm transition-colors duration-200"
-            >
-              CGV
-            </a>
+              <a
+                href="/mentions-legales"
+                className="hover:text-white transition-colors duration-200"
+              >
+                Mentions légales
+              </a>
+              <span className="mx-3 text-white/40">|</span>
+              <a
+                href="/politique-confidentialite"
+                className="hover:text-white transition-colors duration-200"
+              >
+                Politique de confidentialité
+              </a>
+            </p>
           </div>
         </div>
       </div>

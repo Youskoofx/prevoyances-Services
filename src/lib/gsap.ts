@@ -1,23 +1,7 @@
 import { useLayoutEffect } from "react";
 
-// Use dynamic imports instead of require for browser compatibility
+// Use dynamic imports for Vite/Tempo compatibility
 let gsap: any = null;
-
-// Define a type for GSAP plugins
-type GSAPPlugin = string;
-
-// List of plugins to load
-const plugins: GSAPPlugin[] = [
-  "ScrollTrigger",
-  "ScrollSmoother",
-  "SplitText",
-  "Flip",
-  "DrawSVG",
-  "ScrollTo",
-  "MotionPath",
-  "MorphSVG",
-  "Draggable",
-];
 
 // Initialize GSAP only on the client side
 if (typeof window !== "undefined") {
@@ -25,22 +9,21 @@ if (typeof window !== "undefined") {
   (async () => {
     try {
       // Dynamic import for GSAP core
-      const module = await import("gsap");
-      gsap = module.default || module;
+      const { gsap: gsapCore } = await import("gsap");
+      gsap = gsapCore;
 
-      // Load and register all plugins
-      for (const pluginName of plugins) {
-        try {
-          if (typeof (window as any)[pluginName] === "undefined") {
-            const pluginModule = await import(`gsap/${pluginName}`);
-            const plugin = pluginModule.default || pluginModule;
-            gsap.registerPlugin(plugin);
-            (window as any)[pluginName] = plugin;
-          }
-        } catch (e) {
-          console.warn(`${pluginName} plugin not available`, e);
-        }
-      }
+      // Lazy-import plugins to avoid "not available" errors
+      Promise.all([
+        import("gsap/ScrollTrigger"),
+        import("gsap/Flip"),
+        import("gsap/Draggable"),
+      ])
+        .then(([{ ScrollTrigger }, { Flip }, { Draggable }]) => {
+          gsap.registerPlugin(ScrollTrigger, Flip, Draggable);
+        })
+        .catch((e) => {
+          console.warn("Some GSAP plugins could not be loaded", e);
+        });
     } catch (e) {
       console.error("Failed to load GSAP", e);
     }
@@ -50,26 +33,32 @@ if (typeof window !== "undefined") {
 // Export GSAP instance
 export { gsap };
 
-// Custom hook for GSAP animations with proper cleanup
+// Custom hook for GSAP animations with proper cleanup using context
 export const useGSAP = (
   callback: (gsapInstance: any) => void | (() => void),
   dependencies: any[] = [],
+  scope?: React.RefObject<HTMLElement>,
 ) => {
   useLayoutEffect(() => {
     // Skip if we're not in the browser or GSAP isn't loaded yet
     if (!gsap) return;
 
-    // Run the animation callback with gsap instance
-    const cleanup = callback(gsap);
+    // Check for reduced motion preference
+    const prefersReduced = prefersReducedMotion();
+    if (prefersReduced) {
+      // Skip animations for users who prefer reduced motion
+      return;
+    }
+
+    // Create GSAP context for better cleanup
+    const ctx = gsap.context(() => {
+      const cleanup = callback(gsap);
+      return cleanup;
+    }, scope?.current);
 
     // Return cleanup function
     return () => {
-      if (typeof cleanup === "function") {
-        cleanup();
-      }
-
-      // Kill any remaining GSAP animations to prevent memory leaks
-      gsap.killTweensOf("*");
+      ctx.revert(); // This will kill all animations created in this context
     };
   }, dependencies);
 };
@@ -122,7 +111,7 @@ export const createSmoothScroll = (options = {}) => {
     // Disable for users who prefer reduced motion
     smooth: prefersReducedMotion()
       ? 0
-      : options.smooth || defaultOptions.smooth,
+      : (options as any).smooth || defaultOptions.smooth,
   });
 };
 

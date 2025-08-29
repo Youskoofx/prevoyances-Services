@@ -34,19 +34,16 @@ const HeroTimeline = ({
 
   // Handle scroll to next section
   const scrollToNextSection = () => {
-    if (typeof window !== "undefined" && window.ScrollToPlugin) {
-      const nextSection = heroRef.current?.nextElementSibling;
-      if (nextSection) {
+    const nextSection = heroRef.current?.nextElementSibling;
+    if (nextSection) {
+      if (typeof window !== "undefined" && window.ScrollToPlugin) {
         gsap.to(window, {
           duration: 1.2,
           scrollTo: { y: nextSection, offsetY: 80 },
           ease: "power3.inOut",
         });
-      }
-    } else {
-      // Fallback for when ScrollToPlugin is not available
-      const nextSection = heroRef.current?.nextElementSibling;
-      if (nextSection) {
+      } else {
+        // Fallback for when ScrollToPlugin is not available
         nextSection.scrollIntoView({ behavior: "smooth" });
       }
     }
@@ -62,13 +59,13 @@ const HeroTimeline = ({
     if (titleRef.current) {
       // Try to use SplitText plugin if available
       let chars;
-      const splitText = createSplitText(titleRef.current, {
+      const splitTextInstance = createSplitText(titleRef.current, {
         type: "chars,words",
       });
 
-      if (splitText) {
+      if (splitTextInstance) {
         // Use SplitText plugin
-        chars = splitText.chars;
+        chars = splitTextInstance.chars;
       } else {
         // Fallback to manual splitting
         const words = titleRef.current.innerText.split(" ");
@@ -198,7 +195,13 @@ const HeroTimeline = ({
     return () => {
       // Cleanup
       tl.kill();
-      if (splitText) splitText.revert();
+      if (splitTextInstance && typeof splitTextInstance.revert === "function") {
+        try {
+          splitTextInstance.revert();
+        } catch (e) {
+          console.warn("Error reverting SplitText:", e);
+        }
+      }
     };
   }, []);
 

@@ -1,14 +1,16 @@
 import React, { useRef } from "react";
 import { Card, CardContent } from "./ui/card";
 import { useGSAP, gsap } from "@/lib/gsap";
-import { Shield, Car, Home, Heart, Briefcase } from "lucide-react";
+import { Shield, Car, Heart, Briefcase, PawPrint } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface Service {
   icon: React.ReactNode;
   title: string;
   description: string;
-  color: string;
-  image?: string;
+  image: string;
+  href: string;
+  buttonText: string;
 }
 
 interface ServicesCardsProps {
@@ -19,114 +21,130 @@ const ServicesCards = ({ services = defaultServices }: ServicesCardsProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
-  useGSAP((gsap) => {
-    if (sectionRef.current && cardsRef.current) {
-      const cards = cardsRef.current.querySelectorAll(".service-card");
+  useGSAP(
+    (gsap) => {
+      if (sectionRef.current && cardsRef.current) {
+        const cards = cardsRef.current.querySelectorAll(".service-card");
 
-      // Fade-up animation with stagger
-      gsap.fromTo(
-        cards,
-        { y: 80, opacity: 0, rotationX: 15 },
-        {
-          y: 0,
-          opacity: 1,
-          rotationX: 0,
-          stagger: 0.15,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        },
-      );
+        // GSAP fade animation for cards with ScrollTrigger
+        if (typeof window !== "undefined" && window.ScrollTrigger) {
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: cardsRef.current,
+                start: "top 80%",
+                toggleActions: "play none none none",
+              },
+            },
+          );
+        }
 
-      // Add tilt effect on hover
-      cards.forEach((card) => {
-        const handleMouseMove = (e: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = (y - centerY) / 10;
-          const rotateY = (centerX - x) / 10;
+        // Subtle hover effects
+        cards.forEach((card) => {
+          const handleMouseEnter = () => {
+            gsap.to(card, {
+              y: -6,
+              boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          };
 
-          gsap.to(card, {
-            rotationX: rotateX,
-            rotationY: rotateY,
-            transformPerspective: 1000,
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        };
+          const handleMouseLeave = () => {
+            gsap.to(card, {
+              y: 0,
+              boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          };
 
-        const handleMouseLeave = () => {
-          gsap.to(card, {
-            rotationX: 0,
-            rotationY: 0,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-        };
-
-        card.addEventListener("mousemove", handleMouseMove);
-        card.addEventListener("mouseleave", handleMouseLeave);
-      });
-    }
-  }, []);
+          card.addEventListener("mouseenter", handleMouseEnter);
+          card.addEventListener("mouseleave", handleMouseLeave);
+        });
+      }
+    },
+    [],
+    sectionRef,
+  );
 
   return (
-    <section
-      ref={sectionRef}
-      id="services"
-      className="py-24 bg-gradient-to-br from-gray-50 to-white"
-    >
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 font-sora">
-            Nos <span className="text-emerald">Solutions</span>
+    <section ref={sectionRef} id="services" className="py-24 bg-white">
+      <div className="max-w-[1100px] mx-auto px-6">
+        <div className="text-center mb-12">
+          <h2
+            className="text-4xl font-bold text-ink mb-4 font-poppins"
+            style={{ letterSpacing: "-0.02em", fontWeight: 800 }}
+          >
+            Nos assurances
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Découvrez notre gamme complète de produits d'assurance adaptés à
-            tous vos besoins
+          <p
+            className="text-xl text-muted max-w-2xl mx-auto font-inter"
+            style={{ lineHeight: "1.65" }}
+          >
+            Des solutions simples et adaptées à chaque profil
           </p>
         </div>
 
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service, index) => (
             <Card
               key={index}
-              className="service-card bg-white/70 backdrop-blur-lg shadow-xl/10 hover:shadow-xl/20 border-0 transition-all duration-300 cursor-pointer group"
-              style={{ transformStyle: "preserve-3d" }}
+              className="service-card bg-white border border-line hover:border-primary/20 transition-all duration-300 cursor-pointer group overflow-hidden"
+              style={{
+                borderRadius: "16px",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+              }}
             >
-              <CardContent className="p-0 h-full flex flex-col">
-                {service.image && (
-                  <div className="relative h-48 overflow-hidden rounded-t-lg">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    <div
-                      className={`absolute top-4 left-4 w-12 h-12 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center shadow-lg`}
-                    >
-                      {service.icon}
-                    </div>
+              <CardContent className="p-0">
+                <div
+                  className="relative overflow-hidden"
+                  style={{ height: "180px", borderRadius: "16px 16px 0 0" }}
+                >
+                  <img
+                    src={service.image}
+                    alt={getServiceAltText(index)}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    width="400"
+                    height="180"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <div className="text-primary">{service.icon}</div>
                   </div>
-                )}
-                <div className="p-6 flex-1 flex flex-col justify-center text-center">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 font-sora">
+                  <h3
+                    className="text-xl font-bold text-ink mb-3 font-poppins"
+                    style={{ letterSpacing: "-0.02em", fontWeight: 800 }}
+                  >
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed text-sm">
+                  <p
+                    className="text-muted font-inter mb-6"
+                    style={{ lineHeight: "1.65" }}
+                  >
                     {service.description}
                   </p>
+                  <Button
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-semibold font-inter transition-all duration-300"
+                    style={{ borderRadius: "9999px", height: "48px" }}
+                    onClick={() => {
+                      window.location.href = service.href;
+                    }}
+                  >
+                    {service.buttonText}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -139,44 +157,67 @@ const ServicesCards = ({ services = defaultServices }: ServicesCardsProps) => {
 
 const defaultServices: Service[] = [
   {
-    icon: <Heart className="w-8 h-8 text-white" />,
-    title: "Assurance Santé",
-    description: "Prenez soin de votre santé avec nos mutuelles performantes.",
-    color: "from-neon to-emerald",
-    image: "/cdn/service-sante.webp",
+    icon: <Heart className="w-5 h-5" />,
+    title: "Santé & Mutuelle",
+    description:
+      "Remboursements renforcés en optique, dentaire et hospitalisation.",
+    image:
+      "https://images.unsplash.com/photo-1588776814546-ec2f22bb6f2e?ixlib=rb-4.0.3&q=80&w=1080&fit=crop",
+    href: "/assurances#sante",
+    buttonText: "Découvrir",
   },
   {
-    icon: <Briefcase className="w-8 h-8 text-white" />,
-    title: "TNS",
+    icon: <Shield className="w-5 h-5" />,
+    title: "Prévoyance",
     description:
-      "Solutions dédiées aux travailleurs non-salariés et indépendants.",
-    color: "from-gold to-sapphire",
-    image: "/cdn/service-tns.webp",
+      "Maintien de revenus et protection de vos proches en cas d'aléas.",
+    image:
+      "https://images.unsplash.com/photo-1620228885847-01cf7af5120a?ixlib=rb-4.0.3&q=80&w=1080&fit=crop",
+    href: "/assurances#prevoyance",
+    buttonText: "En savoir plus",
   },
   {
-    icon: <Home className="w-8 h-8 text-white" />,
-    title: "Assurance Habitation",
+    icon: <Car className="w-5 h-5" />,
+    title: "Auto & Habitation",
     description:
-      "Protégez votre logement et vos biens avec nos garanties complètes.",
-    color: "from-emerald to-sapphire",
-    image: "/cdn/service-home.webp",
+      "Couvrez vos biens contre les sinistres du quotidien, simplement.",
+    image:
+      "https://images.unsplash.com/photo-1604014237800-1adfcaad4191?ixlib=rb-4.0.3&q=80&w=1080&fit=crop",
+    href: "/contact",
+    buttonText: "Obtenir un devis",
   },
   {
-    icon: <Shield className="w-8 h-8 text-white" />,
-    title: "RC Pro",
+    icon: <Briefcase className="w-5 h-5" />,
+    title: "Professionnels",
     description:
-      "Responsabilité civile professionnelle pour sécuriser votre activité.",
-    color: "from-emerald to-gold",
-    image: "/cdn/service-rcpro.webp",
+      "RC Pro, multirisque et protection juridique pour votre activité.",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&q=80&w=1080&fit=crop",
+    href: "/assurances#pro",
+    buttonText: "Découvrir",
   },
   {
-    icon: <Heart className="w-8 h-8 text-white" />,
-    title: "Assurance Animaux",
+    icon: <PawPrint className="w-5 h-5" />,
+    title: "Animaux",
     description:
-      "Protégez vos compagnons à quatre pattes avec nos formules adaptées.",
-    color: "from-sapphire to-neon",
-    image: "/cdn/service-pet.webp",
+      "Frais vétérinaires, hospitalisation et prévention pour vos compagnons.",
+    image:
+      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&q=80&w=1080&fit=crop",
+    href: "/assurances#animaux",
+    buttonText: "En savoir plus",
   },
 ];
+
+// Alt text for service images
+const getServiceAltText = (index: number): string => {
+  const altTexts = [
+    "Consultation médicale - Assurance Santé & Mutuelle",
+    "Protection familiale - Assurance Prévoyance",
+    "Voiture et maison - Assurance Auto & Habitation",
+    "Bureau professionnel - Assurance Professionnels",
+    "Chien et vétérinaire - Assurance Animaux",
+  ];
+  return altTexts[index] || "Service d'assurance Prévoyance Services";
+};
 
 export default ServicesCards;

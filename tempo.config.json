@@ -1,52 +1,63 @@
 {
   "typography": [
     {
-      "name": "Header 1",
+      "name": "Heading 1",
       "preview": "Aa",
       "tag": "h1",
       "classes": [
-        "text-4xl",
-        "font-extrabold",
-        "tracking-tight",
-        "lg:text-5xl"
+        "text-heading-1",
+        "font-heading",
+        "text-ink"
       ],
-      "previewClasses": ["text-3xl", "font-extrabold", "tracking-tight"]
+      "previewClasses": ["text-3xl", "font-heading", "tracking-tight"]
     },
     {
-      "name": "Header 2",
+      "name": "Heading 2",
       "preview": "Aa",
       "tag": "h2",
-      "classes": ["text-3xl", "font-semibold", "tracking-tight"]
+      "classes": ["text-heading-2", "font-heading", "text-ink"]
     },
     {
-      "name": "Header 3",
+      "name": "Heading 3",
       "preview": "Aa",
       "tag": "h3",
-      "classes": ["text-2xl", "font-semibold", "tracking-tight"]
+      "classes": ["text-heading-3", "font-heading", "text-ink"]
     },
     {
-      "name": "Header 4",
+      "name": "Heading 4",
       "preview": "Aa",
       "tag": "h4",
-      "classes": ["text-xl", "font-semibold", "tracking-tight"]
+      "classes": ["text-heading-4", "font-heading", "text-ink"]
     },
     {
-      "name": "Paragraph",
+      "name": "Body Large",
       "preview": "¶",
       "tag": "p",
-      "classes": ["leading-7"]
+      "classes": ["text-body-lg", "font-body", "text-muted"]
     },
     {
-      "name": "Lead Text",
-      "preview": "A",
+      "name": "Body",
+      "preview": "¶",
       "tag": "p",
-      "classes": ["text-xl", "text-muted-foreground"]
+      "classes": ["text-body", "font-body", "text-muted"]
+    },
+    {
+      "name": "Body Small",
+      "preview": "¶",
+      "tag": "p",
+      "classes": ["text-body-sm", "font-body", "text-muted"]
+    },
+    {
+      "name": "Button Text",
+      "preview": "Button",
+      "tag": "span",
+      "classes": ["text-button", "font-body"]
     },
     {
       "name": "Blockquote",
       "preview": "abc",
       "tag": "blockquote",
-      "classes": ["border-l-2", "pl-6", "italic"],
+      "classes": ["border-l-2", "border-primary", "pl-6", "italic", "text-muted"],
       "previewClasses": ["border-l-2", "pl-2", "italic"]
     },
     {
@@ -56,37 +67,257 @@
       "classes": [
         "relative",
         "rounded",
-        "bg-muted",
+        "bg-surface",
         "px-[0.3rem]",
         "py-[0.2rem]",
         "font-mono",
         "text-sm",
         "font-semibold"
       ]
-    },
-    {
-      "name": "Large",
-      "preview": "A",
-      "tag": "div",
-      "classes": ["text-lg", "font-semibold"]
-    },
-    {
-      "name": "Small",
-      "preview": "Aa",
-      "tag": "small",
-      "classes": ["text-sm", "font-medium", "leading-none"]
-    },
-    {
-      "name": "Muted",
-      "preview": "Aa",
-      "tag": "p",
-      "classes": ["text-sm", "text-muted-foreground"]
-    },
-    {
-      "name": "Extra Small",
-      "preview": "Aa",
-      "tag": "p",
-      "classes": ["text-xs", "font-light"]
     }
-  ]
+  ],
+  "layout": {
+    "header_component": "SiteHeader",
+    "footer_component": "SiteFooter",
+    "apply_to_all_pages": true,
+    "disable_page_specific_headers": true,
+    "disable_page_specific_footers": true,
+    "sticky_header": true,
+    "scroll_behavior": "smooth",
+    "container_max_width": "1100px",
+    "section_padding": {
+      "desktop": "6rem",
+      "mobile": "4rem"
+    }
+  },
+  "routing": {
+    "routes": {
+      "/": "Home",
+      "/assurances": "PageAssurances",
+      "/pourquoi-nous": "PagePourquoiNous",
+      "/faq": "PageFAQ",
+      "/actualites": "PageActualites",
+      "/contact": "PageContact",
+      "/mentions-legales": "PageMentions",
+      "/confidentialite": "PageConfidentialite"
+    },
+    "redirects_301": {
+      "/actualite": "/actualites",
+      "/assurance": "/assurances",
+      "/politique-confidentialite": "/confidentialite"
+    },
+    "not_found": {
+      "component": "Page404",
+      "action": "redirect_home"
+    },
+    "scroll_behavior": "smooth",
+    "anchor_offset": 80
+  },
+  "performance": {
+    "images": {
+      "lazy_load": true,
+      "formats": ["webp", "avif", "jpg"],
+      "hero_preload": true,
+      "partners_logo_height": 34,
+      "fade_in": true
+    },
+    "js": {
+      "defer": true,
+      "split_chunks": true
+    },
+    "navigation": {
+      "prefetch_internal_links": "hover",
+      "smooth_scroll": true,
+      "anchor_offset": 80
+    },
+    "css": {
+      "critical_css_inline": true
+    },
+    "animations": {
+      "default_duration": "300ms",
+      "easing": "ease-out",
+      "reduce_motion_respect": true,
+      "page_transitions": {
+        "type": "fade+slide",
+        "direction": "up"
+      },
+      "elements": {
+        "buttons_hover": {
+          "scale": 1.04,
+          "shadow": true
+        },
+        "cards_hover": {
+          "lift": true,
+          "shadow": "0 8px 20px rgba(0,0,0,0.08)"
+        }
+      },
+      "partners_carousel": {
+        "direction": "left",
+        "speed": "slow",
+        "infinite": true,
+        "pause_on_hover": true
+      }
+    }
+  },
+  "chatAI": {
+    "trigger_button": {
+      "position": {
+        "corner": "bottom-right",
+        "offset_x": 20,
+        "offset_y": 20
+      },
+      "label": "Besoin d'aide ?",
+      "icon": "message-circle",
+      "style": {
+        "bg": "#115E59",
+        "color": "#FFFFFF",
+        "radius": 999,
+        "shadow": "0 4px 12px rgba(17,94,89,.3)"
+      }
+    },
+    "panel": {
+      "title": "Assistant Assurance",
+      "subtitle": "Prévoyance Services",
+      "welcome": "Bonjour 👋 Je suis l'assistant assurance de Prévoyance Services. Posez vos questions (santé, prévoyance, auto, habitation, pro, animaux) ou demandez un devis gratuit.",
+      "placeholder": "Écrivez votre question…",
+      "suggestions": ["Comparer mutuelles santé 🏥", "Un devis auto 🚗", "Protéger ma famille 👨‍👩‍👧‍👦", "Être rappelé 📞"],
+      "size": {
+        "width": 380,
+        "height": 520
+      }
+    },
+    "ai_model": {
+      "provider": "gpt-4o-mini",
+      "tone": "clair, humain, rassurant",
+      "knowledge_scope": "assurances"
+    },
+    "conversion_flow": {
+      "trigger_phrases": ["devis", "contact", "rappel", "prix", "simulation", "protéger", "souscrire"],
+      "lead_form": {
+        "title": "Demande de devis",
+        "fields": [
+          {
+            "name": "firstname",
+            "label": "Prénom",
+            "required": true
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "email",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "label": "Téléphone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "consent",
+            "label": "J'accepte la politique de confidentialité",
+            "type": "checkbox",
+            "required": true
+          }
+        ],
+        "submit_label": "Envoyer ma demande",
+        "on_complete": [
+          {
+            "action": "email",
+            "to": "contact@prevoyanceservices.fr",
+            "subject": "Lead Chatbot"
+          },
+          {
+            "action": "store:Lead"
+          }
+        ]
+      }
+    },
+    "behaviors": {
+      "inactivity_reminder": "Toujours là si vous voulez un devis gratuit 🙂",
+      "inactivity_delay_sec": 40,
+      "auto_offer_after_messages": 3
+    }
+  },
+  "analytics": {
+    "provider": "gtm",
+    "events": [
+      {
+        "name": "cta_devis_click",
+        "selector": "a[href*='/contact']"
+      },
+      {
+        "name": "chat_open",
+        "trigger": "ChatAI.open"
+      },
+      {
+        "name": "lead_submitted",
+        "trigger": "ChatAI.complete"
+      },
+      {
+        "name": "nav_click",
+        "selector": "header nav a"
+      }
+    ],
+    "utm_autotag": {
+      "enabled": true,
+      "targets": ["a[href*='/contact']", "a[href*='/assurances']"]
+    }
+  },
+  "a11y_seo": {
+    "landmarks": {
+      "header": true,
+      "main": true,
+      "footer": true
+    },
+    "skip_link": {
+      "enabled": true,
+      "label": "Aller au contenu",
+      "href": "#main"
+    },
+    "headings_order_check": true,
+    "contrast_check": true,
+    "meta": {
+      "title_template": "%s • Prévoyance Services",
+      "default_description": "Courtier indépendant en assurance : santé, prévoyance, auto, habitation, pro/TNS, animaux. Devis gratuit en 24–48h."
+    },
+    "schema_org": {
+      "organization": {
+        "@type": "Organization",
+        "name": "Prévoyance Services",
+        "url": "https://prevoyanceservices.fr",
+        "logo": "https://prevoyanceservices.fr/assets/logo.svg",
+        "telephone": "+33147941234",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "15 Avenue Gabriel Péri",
+          "postalCode": "92230",
+          "addressLocality": "Gennevilliers",
+          "addressCountry": "FR"
+        }
+      }
+    }
+  },
+  "page404": {
+    "title": "Oups, page introuvable",
+    "text": "Le lien a peut-être changé. Voici les pages utiles :",
+    "links": [
+      {
+        "label": "Accueil",
+        "href": "/"
+      },
+      {
+        "label": "Nos assurances",
+        "href": "/assurances"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
+      }
+    ],
+    "action": {
+      "label": "Demander un devis",
+      "href": "/contact"
+    }
+  }
 }

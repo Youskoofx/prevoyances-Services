@@ -1,15 +1,23 @@
 import { Suspense } from "react";
-import { useRoutes, Routes, Route } from "react-router-dom";
+import { useRoutes, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/home";
 import QcmWizard from "./components/QcmWizard";
+import FAQPage from "./components/FAQPage";
+import BlogListing from "./components/BlogListing";
+import ArticleTemplate from "./components/ArticleTemplate";
 import routes from "tempo-routes";
 
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <>
+        {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
+
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/actualites" element={<BlogListing />} />
+          <Route path="/actualites/:slug" element={<ArticleTemplate />} />
           <Route
             path="/prevoyance-ai"
             element={
@@ -29,9 +37,8 @@ function App() {
               </div>
             }
           />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-
-        {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
       </>
     </Suspense>
   );
